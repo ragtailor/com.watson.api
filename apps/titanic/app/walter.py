@@ -13,8 +13,5 @@ class Walter:
 
     def get_data(self):
         df = pd.read_csv(_CSV_PATH)
-        print(df.head(1))
-
-    def head_records(self, n: int = 1) -> list[dict]:
-        df = pd.read_csv(_CSV_PATH)
-        return json.loads(df.head(n).to_json(orient="records"))
+        # 인덱스 1번 행만 반환 (DataFrame 형태 유지)
+        return df.iloc[[1]].astype(object).where(df.iloc[[1]].notna(), None)
