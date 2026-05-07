@@ -13,13 +13,8 @@ class Walter:
 
     def get_data(self):
         df = pd.read_csv(_CSV_PATH)
-        print(df.head(10))
+        print(df.head(1))
 
-    def head_records(self, n: int = 10) -> list[dict]:
+    def head_records(self, n: int = 1) -> list[dict]:
         df = pd.read_csv(_CSV_PATH)
         return json.loads(df.head(n).to_json(orient="records"))
-
-
-    
-
-
