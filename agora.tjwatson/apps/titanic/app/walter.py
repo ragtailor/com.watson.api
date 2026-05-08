@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 
 import pandas as pd
@@ -14,4 +13,9 @@ class Walter:
     def get_data(self):
         df = pd.read_csv(_CSV_PATH)
         # 인덱스 1번 행만 반환 (DataFrame 형태 유지)
-        return df.iloc[[1]].astype(object).where(df.iloc[[1]].notna(), None)
+        return df.iloc[[0]].astype(object).where(df.iloc[[0]].notna(), None)
+
+    def get_count(self):
+        df = pd.read_csv(_CSV_PATH)
+        # 전체 승객 수(행 개수) 반환
+        return int(df.shape[0])
