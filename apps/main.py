@@ -1,10 +1,12 @@
 from typing import List
 
 from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from titanic.app.james import James
+from titanic.app.james_controller import JamesController
 from doro.app.doro_director import DoroDirector
 
 
@@ -36,24 +38,31 @@ def read_root():
 
 @app.get("/titanic/data")
 def read_titanic_data():
-    james = James()
+    james = JamesController()
     df = james.get_data()
 
     return df.to_dict(orient="records")
 
 @app.get("/titanic/count")
 def read_titanic_count():
-    james = James()
+    james = JamesController()
     count = james.get_count()
 
     return {"count": count}
 
 @app.get("/titanic/tree")
 def read_titanic_tree():
-    james = James()
+    james = JamesController()
     tree = james.has_decision_tree_model()
 
     return {"tree": tree}
+
+
+@app.get("/titanic/model")
+def read_titanic_model():
+    controller = JamesController()
+    model_name = controller.get_model_name_and_accuracy()
+    return JSONResponse(content=jsonable_encoder(model_name))
 
 
 @app.get("/doro/data")
