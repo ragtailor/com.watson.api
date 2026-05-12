@@ -21,16 +21,6 @@ app.add_middleware(
 )
 
 
-class TitanicQARequest(BaseModel):
-    question: str = Field(..., min_length=1, max_length=500)
-
-
-class TitanicQAResponse(BaseModel):
-    answer: str
-    confidence: float
-    sources: List[str]
-
-
 @app.get("/")
 def read_root():
     return {"message": "FAST API 메인 페이지 ", "docs": "/docs"}
