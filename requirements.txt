@@ -1,4 +1,5 @@
 fastapi
+google-generativeai
 uvicorn[standard]
 sqlalchemy[asyncio]
 psycopg[binary]
