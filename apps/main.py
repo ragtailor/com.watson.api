@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -11,9 +12,24 @@ from adapters.db_health_adapter import DbHealthAdapter
 from database import dispose_engine, get_db
 from doro.app.doro_director import DoroDirector
 from matrix.app.keymaker import get_keymaker
+from secom.app.controllers.user_controller import router as secom_router
+from secom.app.models import user_model as _secom_user_model  # noqa: F401 — ORM 메타데이터 등록
 from titanic.app.james_controller import JamesController
 
 keymaker = get_keymaker()
+
+
+def _configure_logging() -> None:
+    """uvicorn 콘솔에 앱 logger.info가 보이도록 기본 핸들러를 설정합니다."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(levelname)s:\t%(message)s",
+        force=True,
+    )
+
+
+_configure_logging()
+logger = logging.getLogger(__name__)
 
 
 class ChatRequest(BaseModel):
@@ -24,6 +40,20 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     reply: str
+
+
+class SignupRequest(BaseModel):
+    id: str = Field(..., min_length=1, description="아이디")
+    password: str = Field(..., min_length=1, description="비밀번호")
+    nickname: str = Field(..., min_length=1, description="닉네임")
+    email: str = Field(..., min_length=1, description="이메일")
+
+
+class SignupResponse(BaseModel):
+    message: str
+    id: str
+    nickname: str
+    email: str
 
 
 @asynccontextmanager
@@ -43,6 +73,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(secom_router)
 
 
 @app.get("/")
@@ -137,6 +169,22 @@ def read_doro_data():
     df = doro_director.get_data()
 
     return df.to_dict(orient="records")
+
+@app.post("/signup", response_model=SignupResponse)
+def signup(req: SignupRequest) -> SignupResponse:
+    logger.info(
+        "회원가입 요청 수신 — id=%s, password=%s, nickname=%s, email=%s",
+        req.userId,
+        req.password,
+        req.nickname,
+        req.email,
+    )
+    return SignupResponse(
+        message="회원가입 요청이 접수되었습니다.",
+        id=req.id,
+        nickname=req.nickname,
+        email=req.email,
+    )
 
 
 if __name__ == "__main__":

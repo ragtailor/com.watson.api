@@ -27,7 +27,7 @@ class Keymaker:
         self._env_path = env_path or default_backend_env_path()
         self._dotenv_loaded = False
         self._gemini_model: Any = None
-        self._gemini_model_id = "gemini-1.5-flash"
+        self._gemini_model_id = "gemini-2.5-flash"
 
     @classmethod
     def instance(cls, env_path: Path | None = None) -> Keymaker:
@@ -58,6 +58,9 @@ class Keymaker:
         if not key:
             self._gemini_model = None
             return
+        model_id = (os.getenv("GEMINI_MODEL") or self._gemini_model_id).strip()
+        if model_id:
+            self._gemini_model_id = model_id
         genai.configure(api_key=key)
         self._gemini_model = genai.GenerativeModel(self._gemini_model_id)
 
