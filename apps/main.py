@@ -14,8 +14,9 @@ from doro.app.doro_director import DoroDirector
 from matrix.app.keymaker import get_keymaker
 
 from secom.app.models import user_model as _secom_user_model  # noqa: F401 — ORM 메타데이터 등록
-from titanic.app.james_controller import JamesController
-from titanic.app.schemas.caledon_validation import CaledonValidation
+from titanic.app.use_cases.titanic_query_impl import JamesController
+from titanic.app.use_cases.caledon_validation import CaledonValidation
+from titanic.adapter.inbound.api.v1.titanic_query_router import router as titanic_query_router
 from secom.app.schemas.user_schema import UserSchema
 from secom.app.controllers.user_controller import UserController
 
@@ -77,6 +78,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(titanic_query_router)
+
 
 
 
@@ -135,35 +138,11 @@ async def check_db(db: AsyncSession = Depends(get_db)):
     return await DbHealthAdapter.neon_time_check(db)
 
 
-@app.get("/titanic/data")
-def read_titanic_data():
-    james = JamesController()
-    df = james.get_data()
-
-    return df.to_dict(orient="records")
 
 
-@app.get("/titanic/count")
-def read_titanic_count():
-    james = JamesController()
-    count = james.get_count()
-
-    return {"count": count}
 
 
-@app.get("/titanic/tree")
-def read_titanic_tree():
-    james = JamesController()
-    tree = james.has_decision_tree_model()
 
-    return {"tree": tree}
-
-
-@app.get("/titanic/model")
-def read_titanic_model():
-    controller = JamesController()
-    model_name = controller.get_model_name_and_accuracy()
-    return JSONResponse(content=jsonable_encoder(model_name))
 
 
 @app.post("/titanic/predict")
@@ -171,21 +150,6 @@ def predict_titanic_survival(req: CaledonValidation):
     controller = JamesController()
     result = controller.predict_survival(req)
     return JSONResponse(content=jsonable_encoder(result))
-
-
-@app.get("/titanic/jack")
-def analyze_jack_survival():
-    controller = JamesController()
-    result = controller.analyze_jack()
-    return JSONResponse(content=jsonable_encoder(result))
-
-
-@app.get("/titanic/rose")
-def analyze_rose_survival():
-    controller = JamesController()
-    result = controller.analyze_rose()
-    return JSONResponse(content=jsonable_encoder(result))
-
 
 @app.get("/doro/data")
 def read_doro_data():

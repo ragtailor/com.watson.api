@@ -1,8 +1,7 @@
-import pandas as pd
 from typing import Dict, Any
 
-from titanic.app.services.jack_service import JackService
-from titanic.app.schemas.caledon_validation import CaledonValidation
+from titanic.app.use_cases.jack_service import JackService
+from titanic.app.use_cases.caledon_validation import CaledonValidation
 
 
 class JamesController:
@@ -10,7 +9,7 @@ class JamesController:
         # JackService는 싱글톤이므로 첫 인스턴스 생성 시 모델 학습이 이루어집니다.
         self.service = JackService()
 
-    def get_data(self) -> pd.DataFrame:
+    def get_data(self) -> "pandas.DataFrame":
         """기존 뼈대 API 지원: 첫 번째 승객 데이터 리턴"""
         return self.service.walter.get_data()
 
@@ -20,15 +19,12 @@ class JamesController:
 
     def has_decision_tree_model(self) -> bool:
         """의사결정 트리 모델이 준비되어 있는지 여부 리턴"""
-        # RoseModel 내부 DecisionTreeClassifier 객체 존재 여부 확인
         return self.service.rose.model is not None
 
     def get_model_name_and_accuracy(self) -> Dict[str, Any]:
         """기존 뼈대 API 지원: 모델명과 훈련 정확도 리턴"""
         return self.service.get_model_name_and_accuracy()
 
-    # --- 새로 추가된 예측 비즈니스 로직 연동 메서드 ---
-    
     def predict_survival(self, passenger: CaledonValidation) -> Dict[str, Any]:
         """새로 입력된 탑승자 데이터에 대해 생존 가능성을 예측하고 확률 반환"""
         return self.service.predict_survival(passenger)

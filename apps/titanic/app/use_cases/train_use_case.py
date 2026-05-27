@@ -2,8 +2,8 @@ import logging
 from typing import Dict, Any
 
 from titanic.app.models.rose_model import RoseModel
-from titanic.app.repositories.walter_reader import WalterReader
-from titanic.app.schemas.caledon_validation import CaledonValidation
+from titanic.app.use_cases.walter_reader import WalterReader
+from titanic.app.use_cases.caledon_validation import CaledonValidation
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +24,7 @@ class JackService:
         
         self.walter = WalterReader()
         self.rose = RoseModel()
+        self.trained = False
         
         # 서버 구동 시 최초 1회 전체 데이터를 학습하여 캐싱
         self._train_model()
@@ -32,8 +33,15 @@ class JackService:
     def _train_model(self) -> None:
         try:
             X, y = self.walter.get_features_and_labels()
+            if X.empty or y.empty:
+                logger.warning("[JackService] 학습 데이터를 찾을 수 없어 모델 훈련을 건너뜁니다.")
+                self.accuracy = 0.0
+                self.trained = False
+                return
+
             self.rose.train(X, y)
             self.accuracy = self.rose.get_accuracy(X, y)
+            self.trained = True
             logger.info(
                 "[JackService] RoseModel (DecisionTreeClassifier) 학습 완료. 정확도: %.2f%%", 
                 self.accuracy * 100
@@ -41,6 +49,7 @@ class JackService:
         except Exception as e:
             logger.error("[JackService] 모델 학습 중 에러 발생: %s", str(e))
             self.accuracy = 0.0
+            self.trained = False
 
     def get_model_name_and_accuracy(self) -> Dict[str, Any]:
         return {
@@ -50,41 +59,43 @@ class JackService:
 
     def predict_survival(self, passenger: CaledonValidation) -> Dict[str, Any]:
         """승객 데이터를 받아 전처리 및 생존 여부, 확률 예측"""
-        # Pydantic 스키마를 dict로 추출
         passenger_dict = passenger.model_dump()
         
-        # WalterReader의 전처리 기능을 이용해 학습 형식과 동일한 6개 피처 DataFrame 확보
         preprocessed_x = self.walter.preprocess_single_passenger(passenger_dict)
-        
-        # 예측 수행
+
+        if not self.trained:
+            return {
+                "survived": 0,
+                "survival_probability": "0.00%",
+                "death_probability": "100.00%",
+                "passenger_info": passenger_dict,
+                "message": "학습 데이터가 없어 예측을 제공할 수 없습니다."
+            }
+
         prediction = self.rose.predict(preprocessed_x)[0]
         probabilities = self.rose.predict_proba(preprocessed_x)[0]
         
-        # 생존 확률 (1번 클래스의 확률)
         survival_prob = float(probabilities[1])
         death_prob = float(probabilities[0])
         
         return {
-            "survived": int(prediction),  # 1이면 생존, 0이면 사망
+            "survived": int(prediction),
             "survival_probability": f"{survival_prob * 100:.2f}%",
             "death_probability": f"{death_prob * 100:.2f}%",
             "passenger_info": passenger_dict
         }
 
     def analyze_jack_dawson(self) -> Dict[str, Any]:
-        """디카프리오(잭 도슨)의 가상 데이터를 주입하여 생존 여부 시뮬레이션 및 분석"""
         jack = CaledonValidation(
-            Pclass=3,         # 3등석
-            Sex="male",       # 남성
-            Age=20.0,         # 20세 내외
-            SibSp=0,          # 혼자 탑승
-            Parch=0,          # 혼자 탑승
-            Fare=0.0          # 도박으로 딴 티켓 (요금 0달러)
+            Pclass=3,
+            Sex="male",
+            Age=20.0,
+            SibSp=0,
+            Parch=0,
+            Fare=0.0
         )
         
         result = self.predict_survival(jack)
-        
-        # 잭에 대한 상세 분석 메시지 추가
         result["analysis"] = (
             "당시 타이타닉호 탈출 시 '여성 및 아이 우선' 원칙이 엄격하게 지켜졌고, "
             "잭은 탈출 우선순위가 최하위였던 3등석 남성이었기 때문에 생존율이 극도로 낮게 나옵니다. "
@@ -94,19 +105,16 @@ class JackService:
         return result
 
     def analyze_rose_dewitt_bukater(self) -> Dict[str, Any]:
-        """로즈 드윗 부카터의 가상 데이터를 주입하여 생존 여부 시뮬레이션 및 분석"""
         rose = CaledonValidation(
-            Pclass=1,         # 1등석
-            Sex="female",     # 여성
-            Age=17.0,         # 17세
-            SibSp=1,          # 약혼자와 함께 탑승
-            Parch=1,          # 어머니와 함께 탑승
-            Fare=150.0        # 값비싼 1등석 요금
+            Pclass=1,
+            Sex="female",
+            Age=17.0,
+            SibSp=1,
+            Parch=1,
+            Fare=150.0
         )
         
         result = self.predict_survival(rose)
-        
-        # 로즈에 대한 상세 분석 메시지 추가
         result["analysis"] = (
             "로즈는 생존 우선순위가 가장 높았던 1등석 여성이었기 때문에, "
             "모델 예측 결과에서도 생존 확률이 압도적으로 높게 분석됩니다. "
