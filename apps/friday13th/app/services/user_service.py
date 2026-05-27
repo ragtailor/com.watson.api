@@ -1,6 +1,6 @@
 import logging
 
-from secom.app.repositories import UserRepository
+from secom.app.repositories import JasonRepository
 from secom.app.schemas.user_schema import UserSchema
 
 logger = logging.getLogger(__name__)
@@ -16,6 +16,6 @@ class UserService:
             "[UserService] save_user 레이어 진입 — %s",
             user_schema.model_dump(),
         )
-        user_repository = UserRepository()
+        user_repository = JasonRepository()
         user_repository.save_user(user_schema)
         logger.info("[UserService] save_user 레이어 완료 — userId=%s", user_schema.userId)

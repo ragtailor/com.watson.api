@@ -9,7 +9,7 @@ from secom.app.models.user_model import User
 logger = logging.getLogger(__name__)
 
 
-class UserRepository:
+class JasonRepositoryImpl():
 
     def __init__(self, session: AsyncSession) -> None:
         """FastAPI의 디펜던시 주입(Depends) 등을 통해 비동기 세션을 받습니다."""
@@ -17,7 +17,7 @@ class UserRepository:
 
     async def save_user(self, user: User) -> None:
         logger.info(
-            "[UserRepository] save_user 레이어 진입 — %s",
+            "[JasonRepository] save_user 레이어 진입 — %s",
             user.model_dump(),
         )
 
@@ -26,7 +26,7 @@ class UserRepository:
         if engine is not None:
             async with engine.begin() as conn:
                 await conn.run_sync(SQLModel.metadata.create_all)
-            logger.info("[UserRepository] DB 테이블 검증 및 생성 완료")
+            logger.info("[JasonRepository] DB 테이블 검증 및 생성 완료")
 
         # 2. SQLModel 객체를 세션에 추가 및 커밋 (영속화)
         # 이제 별도의 DTO/스키마 변환 과정 없이 user 객체를 그대로 사용할 수 있습니다.
@@ -37,7 +37,7 @@ class UserRepository:
         await self.session.refresh(user)
 
         logger.info(
-            "[UserRepository] save_user 레이어 완료 — id=%s, userId(user_id)=%s",
+            "[JasonRepository] save_user 레이어 완료 — id=%s, userId(user_id)=%s",
             user.id,
             user.user_id,
         )
