@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any
 
-from titanic.app.models.rose_model import RoseModel
+from apps.titanic.app.use_cases.rose_query import RoseModel
 from titanic.app.use_cases.walter_reader import WalterReader
 from titanic.app.use_cases.caledon_validation import CaledonValidation
 
