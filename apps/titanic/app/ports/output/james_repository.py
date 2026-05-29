@@ -9,6 +9,3 @@ class JamesRepository(ABC):
     async def save_all(self, records: list[dict[str, Any]]) -> int:
         ...
 
-    @abstractmethod
-    async def list_paginated(self, page: int, page_size: int) -> tuple[int, list[dict[str, Any]]]:
-        ...

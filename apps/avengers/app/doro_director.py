@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from imitation_game.app.doro_reader import DoroReader
+from avengers.app.doro_reader import DoroReader
 
 
 app = FastAPI(title="DoroDirector")

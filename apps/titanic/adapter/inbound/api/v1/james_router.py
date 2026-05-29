@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
 from titanic.adapter.outbound.pg.james_pg_repository import JamesPgRepository
-from titanic.app.ports.input.james_use_case import JamesUseCase
+from titanic.app.use_cases.james_command import JamesCommand
 
 
 james_router = APIRouter(prefix="/titanic/james", tags=["james"])
@@ -63,7 +63,7 @@ async def list_passengers(
 ):
     """탑승자 목록을 페이지네이션으로 반환합니다."""
     repository = JamesPgRepository(db)
-    use_case = JamesUseCase(repository)
+    use_case = JamesCommand(repository)
     return await use_case.list_paginated(page, page_size)
 
 
@@ -76,5 +76,5 @@ async def upload_titanic_file(
     """Titanic CSV 파일을 업로드하고 NeonDB에 저장합니다."""
     records = _parse_csv_file(file)
     repository = JamesPgRepository(db)
-    use_case = JamesUseCase(repository)
+    use_case = JamesCommand(repository)
     return await use_case.receive_uploaded_records(records)
