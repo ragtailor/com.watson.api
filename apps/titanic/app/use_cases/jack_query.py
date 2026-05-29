@@ -1,9 +1,9 @@
-import logging
+﻿import logging
 from typing import Dict, Any
 
-from apps.titanic.app.use_cases.rose_query import RoseModel
-from titanic.app.use_cases.walter_reader import WalterReader
-from titanic.app.use_cases.caledon_validation import CaledonValidation
+from titanic.app.use_cases.rose_query import RoseModel
+from titanic.app.use_cases.walter_query import WalterReader
+from titanic.app.use_cases.caledon_query import CaledonValidation
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
-import logging
+﻿import logging
 
-from secom.app.schemas.user_schema import UserSchema
-from secom.app.services.user_service import UserService
+from friday13th.app.schemas.user_schema import UserSchema
+from friday13th.app.services.user_service import UserService
 
 logger = logging.getLogger(__name__)
 

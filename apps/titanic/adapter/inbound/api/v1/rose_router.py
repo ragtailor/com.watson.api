@@ -1,8 +1,8 @@
-from fastapi import APIRouter
+﻿from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 
-from titanic.app.use_cases.titanic_query_impl import JamesController
+from titanic.app.use_cases._james_command import JamesController
 
 titanic_router = APIRouter(prefix="/titanic", tags=["titanic"])
 

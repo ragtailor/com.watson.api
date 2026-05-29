@@ -1,3 +1,8 @@
-from titanic.app.use_cases.titanic_query_impl import JamesController
+from fastapi import APIRouter
 
-__all__ = ["JamesController"]
+from titanic.adapter.inbound.api.v1.james_router import james_router
+from titanic.adapter.inbound.api.v1.rose_router import titanic_router
+
+router = APIRouter()
+router.include_router(james_router)
+router.include_router(titanic_router)

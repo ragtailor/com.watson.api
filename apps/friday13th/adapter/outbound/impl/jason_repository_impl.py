@@ -1,10 +1,10 @@
-import logging
+﻿import logging
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # 위에서 정의한 SQLModel 클래스를 정의한 위치에 맞게 임포트하세요.
-# 예: from secom.app.models.user_model import User
-from secom.app.models.user_model import User
+# 예: from friday13th.app.models.user_model import User
+from friday13th.app.models.user_model import User
 
 logger = logging.getLogger(__name__)
 

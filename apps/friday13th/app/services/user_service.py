@@ -1,7 +1,7 @@
-import logging
+﻿import logging
 
-from secom.app.repositories import JasonRepository
-from secom.app.schemas.user_schema import UserSchema
+from friday13th.app.port.output.jason_repository_port import JasonRepository
+from friday13th.app.schemas.user_schema import UserSchema
 
 logger = logging.getLogger(__name__)
 
