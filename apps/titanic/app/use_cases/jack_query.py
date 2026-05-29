@@ -1,4 +1,5 @@
 ﻿import logging
+from functools import lru_cache
 from typing import Dict, Any
 
 from titanic.app.use_cases.rose_query import RoseModel
@@ -8,33 +9,18 @@ from titanic.app.use_cases.caledon_query import CaledonValidation
 logger = logging.getLogger(__name__)
 
 
-class JackService:
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        """싱글톤 패턴을 적용하여 단 한 번만 모델을 학습하고 메모리에 상주하도록 최적화합니다."""
-        if cls._instance is None:
-            cls._instance = super(JackService, cls).__new__(cls)
-            cls._instance._initialized = False
-        return cls._instance
-
-    def __init__(self) -> None:
-        if self._initialized:
-            return
-        
-        self.walter = WalterReader()
-        self.rose = RoseModel()
+class JackQuery:
+    def __init__(self, walter: WalterReader, rose: RoseModel) -> None:
+        self.walter = walter
+        self.rose = rose
         self.trained = False
-        
-        # 서버 구동 시 최초 1회 전체 데이터를 학습하여 캐싱
         self._train_model()
-        self._initialized = True
 
     def _train_model(self) -> None:
         try:
             X, y = self.walter.get_features_and_labels()
             if X.empty or y.empty:
-                logger.warning("[JackService] 학습 데이터를 찾을 수 없어 모델 훈련을 건너뜁니다.")
+                logger.warning("[JackQuery] 학습 데이터를 찾을 수 없어 모델 훈련을 건너뜁니다.")
                 self.accuracy = 0.0
                 self.trained = False
                 return
@@ -43,11 +29,11 @@ class JackService:
             self.accuracy = self.rose.get_accuracy(X, y)
             self.trained = True
             logger.info(
-                "[JackService] RoseModel (DecisionTreeClassifier) 학습 완료. 정확도: %.2f%%", 
+                "[JackQuery] RoseModel (DecisionTreeClassifier) 학습 완료. 정확도: %.2f%%", 
                 self.accuracy * 100
             )
         except Exception as e:
-            logger.error("[JackService] 모델 학습 중 에러 발생: %s", str(e))
+            logger.error("[JackQuery] 모델 학습 중 에러 발생: %s", str(e))
             self.accuracy = 0.0
             self.trained = False
 

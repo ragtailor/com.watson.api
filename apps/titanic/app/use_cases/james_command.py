@@ -14,6 +14,3 @@ class JamesCommand(JamesUseCase):
         count = await self._repository.save_all(records)
         return {"saved": count}
 
-    async def list_paginated(self, page: int, page_size: int) -> dict[str, Any]:
-        total, items = await self._repository.list_paginated(page, page_size)
-        return {"total": total, "page": page, "page_size": page_size, "items": items}

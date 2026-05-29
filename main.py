@@ -1,15 +1,11 @@
 ﻿import logging
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI, HTTPException
-from fastapi.encoders import jsonable_encoder
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import dispose_engine, get_db, init_engine, create_all_tables
-from titanic.adapter.inbound.api.v1.rose_router import titanic_router
-from titanic.adapter.inbound.api.v1.james_router import james_router
+from titanic.adapter.inbound.api import titanic_router
 
 
 def _configure_logging() -> None:
@@ -47,7 +43,6 @@ app.add_middleware(
 )
 
 app.include_router(titanic_router)
-app.include_router(james_router)
 
 
 

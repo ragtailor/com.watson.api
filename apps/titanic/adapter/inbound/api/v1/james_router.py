@@ -55,25 +55,24 @@ def _parse_csv_file(file: UploadFile) -> list[dict]:
 
     return [_normalize_titanic_row(row) for row in reader]
 
+
+
 @james_router.get("/passengers")
 async def list_passengers(
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
 ):
-    """탑승자 목록을 페이지네이션으로 반환합니다."""
     repository = JamesPgRepository(db)
     use_case = JamesCommand(repository)
     return await use_case.list_paginated(page, page_size)
 
 
-# /titanic/james/upload 엔드포인트에서 CSV 파일을 업로드받아 처리하는 API 라우터입니다.
 @james_router.post("/upload")
 async def upload_titanic_file(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
 ):
-    """Titanic CSV 파일을 업로드하고 NeonDB에 저장합니다."""
     records = _parse_csv_file(file)
     repository = JamesPgRepository(db)
     use_case = JamesCommand(repository)
