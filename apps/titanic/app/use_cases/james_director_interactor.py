@@ -3,14 +3,15 @@ from __future__ import annotations
 from typing import Any
 
 from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
+from titanic.adapter.outbound.pg.james_director_pg_repository import JamesDirectorPgRepository
 from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
 from titanic.app.ports.output.james_director_repository import JamesRepository
 from titanic.app.dtos.james_director_dto import BookingCommand, PersonCommand
 
 
 class JamesDirectorInteractor(JamesDirectorUseCase):
-    def __init__(self, repository: JamesRepository) -> None:
-        self._repository = repository
+    def __init__(self) -> None:
+        pass
 
     async def receive_uploaded_records(self, schema: list[TitanicRecordSchema]) -> dict[str, Any]:
         # schema 에 상위 5줄 출력 하는 로그
@@ -40,9 +41,8 @@ class JamesDirectorInteractor(JamesDirectorUseCase):
                 embarked=record.embarked or "",
             ))
 
-        await self._repository.receive_uploaded_records(person_commands, booking_commands)
+        repository: JamesRepository = JamesDirectorPgRepository(None)
 
-        return {
-            "persons": len(person_commands),
-            "bookings": len(booking_commands),
-        }
+        await repository.receive_uploaded_records(person_commands, booking_commands)
+
+        pass

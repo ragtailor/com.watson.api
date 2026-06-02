@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
 from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
+from titanic.app.use_cases.james_director_interactor import JamesDirectorInteractor
 
 '''
  james_director_router.py
@@ -41,7 +42,7 @@ async def upload_titanic_file(
     for record in schema[:5]:
         print(record, flush=True)
 
-    use_case = JamesDirectorUseCase()
+    use_case : JamesDirectorUseCase = JamesDirectorInteractor()
 
     await use_case.receive_uploaded_records(schema)
 
