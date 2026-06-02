@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class JamesDirectorRecordSchema(BaseModel):
+class TitanicRecordSchema(BaseModel):
     passenger: Optional[str] = Field(None, description="승객 번호")
     survived: Optional[str] = Field(None, description="생존 여부 (0=사망, 1=생존)")
     pclass: Optional[str] = Field(None, description="티켓 등급 (1=1등석, 2=2등석, 3=3등석)")

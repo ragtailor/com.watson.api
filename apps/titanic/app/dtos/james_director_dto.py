@@ -1,12 +1,21 @@
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
+
+@dataclass
+class PersonCommand:
+    passenger_id: str
+    name: str
+    gender: str
+    age: str
+    sib_sp: str
+    parch: str
+    survived: str
 
 
 @dataclass
-class JamesUploadDTO:
-    records: list[dict[str, Any]] = field(default_factory=list)
-
-
-@dataclass
-class JamesSaveResultDTO:
-    saved: int
+class BookingCommand:
+    pclass: str
+    ticket: str
+    fare: str
+    cabin: str
+    embarked: str
+ 

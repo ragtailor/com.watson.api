@@ -2,12 +2,8 @@ from io import StringIO
 import csv
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from core.database import get_db
-from titanic.adapter.outbound.pg.james_director_pg_repository import JamesDirectorPgRepository
-from titanic.app.use_cases.james_director_interactor import JamesDirectorInteractor
-from titanic.adapter.inbound.api.schemas.james_director_schema import JamesDirectorRecordSchema
+from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
+from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
 '''
  james_director_router.py
  전설적인 흥행작 <타이타닉>을 연출하여 
@@ -23,7 +19,6 @@ james_director_router = APIRouter(prefix="/titanic/james", tags=["james"])
 @james_director_router.post("/upload")
 async def upload_titanic_file(
     file: UploadFile = File(...),
-    db: AsyncSession = Depends(get_db),
 ):
     """타이타닉 승객 데이터 CSV 파일 업로드"""
     if file.content_type not in {"text/csv", "application/vnd.ms-excel", "text/plain"}:
@@ -37,12 +32,15 @@ async def upload_titanic_file(
     if reader.fieldnames is None:
         raise HTTPException(status_code=400, detail="CSV 헤더를 읽을 수 없습니다.")
 
-    records = [JamesDirectorRecordSchema(**_normalize_titanic_row(row)).model_dump() for row in reader]
+    schema = [TitanicRecordSchema(**_normalize_titanic_row(row)).model_dump() for row in reader]
 
-    # records 에 상위 5줄 출력 하는 로그
-    print("[제임스 라우터] 업로드된 CSV 파일에서 파싱된 상위 5개 레코드:")
-    for record in records[:5]:
+    # schema 에 상위 5줄 출력 하는 로그
+    print("[제임스 라우터] 업로드된 CSV 파일에서 스키마로 옮겨진 상위 5개 레코드:")
+    for record in schema[:5]:
         print(record)
+
+    use_case = JamesDirectorUseCase()  # 의존성 주입
+    use_case.receive_uploaded_records(schema)
 
 
 
