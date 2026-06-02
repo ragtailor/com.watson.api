@@ -4,13 +4,13 @@ from pydantic import BaseModel, Field
 
 
 class TitanicRecordSchema(BaseModel):
-    passenger: Optional[str] = Field(None, description="승객 번호")
+    passenger_id: Optional[str] = Field(None, description="승객 번호")
     survived: Optional[str] = Field(None, description="생존 여부 (0=사망, 1=생존)")
     pclass: Optional[str] = Field(None, description="티켓 등급 (1=1등석, 2=2등석, 3=3등석)")
     name: Optional[str] = Field(None, description="승객 이름")
     gender: Optional[str] = Field(None, description="성별 (male / female) — CSV의 Sex 컬럼을 정규화")
     age: Optional[str] = Field(None, description="나이")
-    sibsp: Optional[str] = Field(None, description="동승한 형제자매/배우자 수")
+    sib_sp: Optional[str] = Field(None, description="동승한 형제자매/배우자 수")
     parch: Optional[str] = Field(None, description="동승한 부모/자녀 수")
     ticket: Optional[str] = Field(None, description="티켓 번호")
     fare: Optional[str] = Field(None, description="탑승 요금")
@@ -20,7 +20,7 @@ class TitanicRecordSchema(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "passenger": "1",
+                "passenger_id": "1",
                 "survived": "0",
                 "pclass": "3",
                 "name": "Braund, Mr. Owen Harris",

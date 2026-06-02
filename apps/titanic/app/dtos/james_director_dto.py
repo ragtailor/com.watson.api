@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class PersonCommand:
     passenger_id: str
@@ -18,4 +19,4 @@ class BookingCommand:
     fare: str
     cabin: str
     embarked: str
- 
+    

@@ -12,7 +12,7 @@ from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
  고증한 아키텍처의 총괄 디렉터 역할 수행
 '''
 
-james_director_router = APIRouter(prefix="/titanic/james", tags=["james"])
+james_director_router = APIRouter(prefix="/james", tags=["james"])
 
 
 # /titanic/james/upload 엔드포인트는 CSV 파일을 업로드 받아서, 파일을 파싱한 후, 데이터베이스에 저장하는 역할을 합니다.
@@ -73,11 +73,4 @@ def _normalize_titanic_row(row: dict) -> dict:
             normalized[key] = value
     return normalized
 
-@james_director_router.get("/passengers")
-async def list_passengers(
-    page: int = Query(default=1, ge=1),
-    page_size: int = Query(default=50, ge=1, le=200),
-    db: AsyncSession = Depends(get_db),
-):
-    repository = JamesDirectorPgRepository(db)
-    return await repository.list_paginated(page, page_size)
+
