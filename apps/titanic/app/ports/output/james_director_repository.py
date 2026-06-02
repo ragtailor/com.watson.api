@@ -8,7 +8,7 @@ from titanic.app.dtos.james_director_dto import BookingCommand, PersonCommand
 
 class JamesRepository(ABC):
     @abstractmethod
-    async def receive_uploaded_records(
+    async def receive_uploaded_records(self, 
         person_commands: list[PersonCommand], 
         booking_commands: list[BookingCommand]) -> int:
         pass

@@ -9,7 +9,7 @@ from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRec
 class JamesDirectorUseCase(ABC):
 
     @abstractmethod
-    async def receive_uploaded_records(schema: list[TitanicRecordSchema]) -> dict[str, Any]:
+    async def receive_uploaded_records(self, schema: list[TitanicRecordSchema]) -> dict[str, Any]:
         """CSV 파일업로드 """
         pass
 
