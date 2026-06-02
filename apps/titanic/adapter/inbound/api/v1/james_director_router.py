@@ -2,12 +2,9 @@ from io import StringIO
 import csv
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.database import get_db
 from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
-from titanic.adapter.outbound.pg.james_director_pg_repository import JamesDirectorPgRepository
-from titanic.app.use_cases.james_director_interactor import JamesDirectorInteractor
+from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
 
 '''
  james_director_router.py
@@ -23,7 +20,6 @@ james_director_router = APIRouter(prefix="/james", tags=["james"])
 @james_director_router.post("/upload")
 async def upload_titanic_file(
     file: UploadFile = File(...),
-    db: AsyncSession = Depends(get_db),
 ):
     """타이타닉 승객 데이터 CSV 파일 업로드"""
     if file.content_type not in {"text/csv", "application/vnd.ms-excel", "text/plain"}:
@@ -45,9 +41,9 @@ async def upload_titanic_file(
     for record in schema[:5]:
         print(record, flush=True)
 
-    repository = JamesDirectorPgRepository(db)
-    use_case = JamesDirectorInteractor(repository)
-    return await use_case.receive_uploaded_records(schema)
+    use_case = JamesDirectorUseCase()
+
+    await use_case.receive_uploaded_records(schema)
 
 
 def _normalize_titanic_row(row: dict) -> dict:
