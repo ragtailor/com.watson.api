@@ -1,7 +1,10 @@
 from io import StringIO
 import csv
+import logging
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+
+logger = logging.getLogger(__name__)
 
 from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
 from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
@@ -38,9 +41,9 @@ async def upload_titanic_file(
     schema = [TitanicRecordSchema(**_normalize_titanic_row(row)) for row in reader]
 
     # schema 에 상위 5줄 출력 하는 로그
-    print("[제임스 라우터] 업로드된 CSV 파일에서 스키마로 옮겨진 상위 5개 레코드:", flush=True)
+    logger.info("[제임스 라우터] 업로드된 CSV 파일에서 스키마로 옮겨진 상위 5개 레코드:")
     for record in schema[:5]:
-        print(record, flush=True)
+        logger.info(record)
 
     use_case : JamesDirectorUseCase = JamesDirectorInteractor()
 

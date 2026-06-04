@@ -2,7 +2,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
-from titanic.adapter.outbound.pg.walter_pg_repository import WalterPgRepository
+from titanic.adapter.outbound.pg.walter_roaster_pg_repository import WalterPgRepository
 from titanic.app.use_cases.caledon_query import CaledonValidation
 from titanic.app.use_cases.walter_roaster_interactor import WalterQuery
 
