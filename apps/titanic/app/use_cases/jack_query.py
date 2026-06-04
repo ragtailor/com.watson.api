@@ -3,7 +3,7 @@ from functools import lru_cache
 from typing import Dict, Any
 
 from titanic.app.use_cases.rose_query import RoseModel
-from titanic.app.use_cases.walter_query import WalterReader
+from titanic.app.use_cases.walter_roaster_interactor import WalterReader
 from titanic.app.use_cases.caledon_query import CaledonValidation
 
 logger = logging.getLogger(__name__)
