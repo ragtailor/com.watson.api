@@ -24,4 +24,9 @@ async def introduce_myself():
     logger.info(f"🐥이름: {schema.name}")
     logger.info(f"🦜메모: {schema.memo}")
     logger.info("###############################################")
+
+    walter: WalterRoasterUseCase = WalterRoasterInteractor()
+    walter.introduce_myself(schema)
+
+    return {"id": schema.id, "name": schema.name, "memo": schema.memo}
     

@@ -3,4 +3,6 @@ from dataclasses import dataclass
 
 @dataclass
 class WalterRoasterQuery:
-    pass
+    id: int
+    name: str
+    memo: str
