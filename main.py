@@ -1,4 +1,5 @@
-﻿import logging
+﻿import asyncio
+import logging
 import sys
 import os
 from contextlib import asynccontextmanager
@@ -8,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "apps"))
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.database import dispose_engine, get_db, init_engine, create_all_tables
+from core.matrix.oracle_database import dispose_engine, get_db, init_engine, create_all_tables
 from titanic.adapter.inbound.api import titanic_router
 
 
@@ -64,4 +65,9 @@ def read_root():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    # Windows: psycopg async는 SelectorEventLoop 필요 (ProactorEventLoop 미지원)
+    # loop="none"으로 uvicorn이 루프를 강제하지 않게 하고, policy만 먼저 설정
+    if sys.platform == "win32":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, loop="none")

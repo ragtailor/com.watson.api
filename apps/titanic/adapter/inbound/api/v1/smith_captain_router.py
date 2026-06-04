@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.database import get_db
-from titanic.adapter.outbound.orm.titanic_model import TitanicRecord
+from core.matrix.oracle_database import get_db
+from titanic.adapter.outbound.orm.person_orm import TitanicRecord
 
 '''
 스미스 선장 (Captain Edward John Smith)

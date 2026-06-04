@@ -5,9 +5,8 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from titanic.adapter.outbound.orm.titanic_model import TitanicRecord
-
-_FEATURE_FIELDS = ["pclass", "gender", "age", "sibsp", "parch", "fare", "survived"]
+from titanic.adapter.outbound.orm.booking_orm import BookingOrm
+from titanic.adapter.outbound.orm.person_orm import PersonOrm
 
 
 class JackSketchPgRepository:
@@ -17,6 +16,21 @@ class JackSketchPgRepository:
     async def get_training_data(self) -> list[dict[str, Any]]:
         """생존 예측 모델 학습에 사용할 피처 데이터 조회"""
         rows = (
-            await self.session.execute(select(TitanicRecord).order_by(TitanicRecord.id))
-        ).scalars().all()
-        return [{f: getattr(r, f) for f in _FEATURE_FIELDS} for r in rows]
+            await self.session.execute(
+                select(PersonOrm, BookingOrm)
+                .outerjoin(BookingOrm, BookingOrm.person_id == PersonOrm.id)
+                .order_by(PersonOrm.id)
+            )
+        ).all()
+        return [
+            {
+                "pclass": booking.pclass if booking else None,
+                "gender": person.gender,
+                "age": person.age,
+                "sibsp": person.sib_sp,
+                "parch": person.parch,
+                "fare": booking.fare if booking else None,
+                "survived": person.survived,
+            }
+            for person, booking in rows
+        ]
