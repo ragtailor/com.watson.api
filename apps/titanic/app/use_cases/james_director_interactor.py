@@ -1,18 +1,16 @@
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
-from titanic.adapter.outbound.pg.james_director_pg_repository import JamesDirectorPgRepository
 from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
+from titanic.app.ports.output.james_director_repository import JamesRepository
 from titanic.app.dtos.james_director_dto import BookingCommand, PersonCommand
 
 
 class JamesDirectorInteractor(JamesDirectorUseCase):
-    def __init__(self, session: AsyncSession) -> None:
-        self.session = session
+    def __init__(self, repository: JamesRepository) -> None:
+        self.repository = repository
 
-    async def receive_uploaded_records(self, schema: list[TitanicRecordSchema]) -> dict:
+    async def upload_titanic_file(self, schema: list[TitanicRecordSchema]) -> dict:
         person_commands = [
             PersonCommand(
                 passenger_id=record.passenger_id or "",
@@ -36,6 +34,5 @@ class JamesDirectorInteractor(JamesDirectorUseCase):
             for record in schema
         ]
 
-        repository = JamesDirectorPgRepository(self.session)
-        saved = await repository.receive_uploaded_records(person_commands, booking_commands)
+        saved = await self.repository.receive_uploaded_records(person_commands, booking_commands)
         return {"saved": saved}

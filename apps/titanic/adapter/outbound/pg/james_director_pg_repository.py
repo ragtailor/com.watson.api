@@ -12,7 +12,7 @@ class JamesDirectorPgRepository(JamesRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def receive_uploaded_records(
+    async def upload_titanic_file(
         self,
         person_commands: list[PersonCommand],
         booking_commands: list[BookingCommand],

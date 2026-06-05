@@ -1,16 +1,11 @@
 from io import StringIO
 import csv
-import logging
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.matrix.oracle_database import get_db
 from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
 from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
-from titanic.app.use_cases.james_director_interactor import JamesDirectorInteractor
-
-logger = logging.getLogger(__name__)
+from titanic.dependencies.james_director import get_james_director_use_case
 
 '''
  james_director_router.py
@@ -26,29 +21,20 @@ james_director_router = APIRouter(prefix="/james", tags=["james"])
 @james_director_router.post("/upload")
 async def upload_titanic_file(
     file: UploadFile = File(...),
-    db: AsyncSession = Depends(get_db),
+    james: JamesDirectorUseCase = Depends(get_james_director_use_case),
 ):
-    """타이타닉 승객 데이터 CSV 파일 업로드"""
-    if file.content_type not in {"text/csv", "application/vnd.ms-excel", "text/plain"}:
-        raise HTTPException(status_code=400, detail="CSV 파일을 업로드해주세요.")
+    return await james.upload_titanic_file(
+        _parse_csv((await file.read()).decode("utf-8", errors="replace"))
+    )
 
-    raw = await file.read()
-    text = raw.decode("utf-8", errors="replace")
+
+def _parse_csv(text: str) -> list[TitanicRecordSchema]:
     if not text.strip():
         raise HTTPException(status_code=400, detail="빈 CSV 파일입니다.")
-
     reader = csv.DictReader(StringIO(text))
     if reader.fieldnames is None:
         raise HTTPException(status_code=400, detail="CSV 헤더를 읽을 수 없습니다.")
-
-    schema = [TitanicRecordSchema(**_normalize_titanic_row(row)) for row in reader]
-
-    logger.info("[제임스 라우터] 업로드된 CSV 파일에서 스키마로 옮겨진 상위 5개 레코드:")
-    for record in schema[:5]:
-        logger.info(record)
-
-    use_case: JamesDirectorUseCase = JamesDirectorInteractor(db)
-    return await use_case.receive_uploaded_records(schema)
+    return [TitanicRecordSchema(**_normalize_titanic_row(row)) for row in reader]
 
 
 def _normalize_titanic_row(row: dict) -> dict:

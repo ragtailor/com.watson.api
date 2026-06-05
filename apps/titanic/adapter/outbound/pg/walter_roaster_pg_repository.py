@@ -32,36 +32,12 @@ def _row_to_dict(person: PersonOrm, booking: BookingOrm | None) -> dict[str, Any
     }
 
 
-class WalterPgRepository:
-    def __init__(self, session: AsyncSession) -> None:
-        self.session = session
-
-    async def list_paginated(
-        self, page: int, page_size: int
-    ) -> tuple[int, list[dict[str, Any]]]:
-        total = (
-            await self.session.execute(
-                select(func.count()).select_from(PersonOrm)
-            )
-        ).scalar_one()
-        rows = (
-            await self.session.execute(
-                select(PersonOrm, BookingOrm)
-                .outerjoin(BookingOrm, BookingOrm.person_id == PersonOrm.id)
-                .order_by(PersonOrm.id)
-                .offset((page - 1) * page_size)
-                .limit(page_size)
-            )
-        ).all()
-        items = [_row_to_dict(person, booking) for person, booking in rows]
-        return total, items
-
 
 class WalterRoasterPgRepository(WalterRoasterRepository):
     '''PostgreSQL을 이용한 월터의 승객 명단 관리 저장소'''
 
-    def __init__(self):
-        pass
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
 
     def introduce_myself(self, query: WalterRoasterQuery):
         '''승객 명단을 가져오는 메소드'''

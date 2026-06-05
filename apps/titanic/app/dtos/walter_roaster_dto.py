@@ -6,3 +6,10 @@ class WalterRoasterQuery:
     id: int
     name: str
     memo: str
+
+
+@dataclass
+class WalterRoasterResponse:
+    id: int
+    name: str
+    memo: str
