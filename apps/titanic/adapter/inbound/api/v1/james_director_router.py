@@ -4,6 +4,7 @@ import csv
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from titanic.adapter.inbound.api.schemas.james_director_schema import TitanicRecordSchema
+from titanic.app.dtos.james_director_dto import JamesDirectorResponse
 from titanic.app.ports.input.james_director_use_case import JamesDirectorUseCase
 from titanic.dependencies.james_director import get_james_director_use_case
 
@@ -18,7 +19,7 @@ from titanic.dependencies.james_director import get_james_director_use_case
 james_director_router = APIRouter(prefix="/james", tags=["james"])
 
 
-@james_director_router.post("/upload")
+@james_director_router.post("/upload", response_model=JamesDirectorResponse, summary="타이타닉 승객 명단 CSV 파일 업로드")
 async def upload_titanic_file(
     file: UploadFile = File(...),
     james: JamesDirectorUseCase = Depends(get_james_director_use_case),
