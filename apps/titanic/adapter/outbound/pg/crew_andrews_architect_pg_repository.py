@@ -13,8 +13,14 @@ class AndrewsArchitectPgRepository(AndrewsArchitectRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def introduce_myself(self, request_data: AndrewsArchitectQuery) -> AndrewsArchitectResponse:
-        '''월터의 자기 소개 레포지토리 구현 메소드'''
-        logger.info(f"[AndrewsArchitectPgRepository] introduce_myself 진입 | request_data={request_data}")
+    async def introduce_myself(self, query: AndrewsArchitectQuery) -> AndrewsArchitectResponse:
         
-        return request_data
+        '''월터의 자기 소개 레포지토리 구현 메소드'''
+
+        logger.info(f"[AndrewsArchitectPgRepository] introduce_myself 진입 | request_data={query}")
+        
+        response: AndrewsArchitectResponse = AndrewsArchitectResponse(
+            id= query.id * 10000,
+            name= query.name + "가 레포지토리에 다녀옴"
+        )
+        return response
