@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 
-class RuthSurvivorRepository(ABC):
+class RuthValidationRepository(ABC):
 
     @abstractmethod
     async def list_by_pclass(

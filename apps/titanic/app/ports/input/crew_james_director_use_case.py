@@ -10,7 +10,7 @@ from tailor.apps.titanic.app.dtos.crew_james_director_dto import JamesDirectorRe
 class JamesDirectorUseCase(ABC):
 
     @abstractmethod
-    async def introduce_myself(self) -> JamesDirectorResponse:
+    async def introduce_myself(self, schema: JamesDirectorSchema) -> JamesDirectorResponse:
         '''제임스 감독의 자기소개 메소드'''
         pass
 

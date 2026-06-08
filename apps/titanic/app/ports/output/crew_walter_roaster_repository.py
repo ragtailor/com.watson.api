@@ -7,6 +7,6 @@ class WalterRoasterRepository(ABC):
 
     @abstractmethod
     def introduce_myself(self, query: WalterRoasterQuery):
-        '''승객 명단을 가져오는 메소드'''
+        '''월터의 자기 소개 레포지토리 추상 메소드'''
         pass
     

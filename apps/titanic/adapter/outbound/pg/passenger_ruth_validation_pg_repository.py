@@ -27,7 +27,7 @@ def _row_to_dict(person: PersonOrm, booking: BookingOrm | None) -> dict[str, Any
     }
 
 
-class RuthSurvivorPgRepository:
+class RuthValidationPgRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 

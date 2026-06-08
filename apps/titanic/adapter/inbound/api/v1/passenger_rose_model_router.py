@@ -2,6 +2,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.matrix.oracle_database import get_db
+from tailor.apps.titanic.adapter.inbound.api.schemas.passenger_rose_model_schema import RoseModelSchema
+from tailor.apps.titanic.app.dtos.passenger_rose_model_dto import RoseModelResponse
+from tailor.apps.titanic.app.ports.input.passenger_rose_model_use_case import RoseModelUseCase
+from tailor.apps.titanic.dependencies.passenger_rose_model_provider import get_rose_model_use_case
 from titanic.adapter.outbound.pg.crew_walter_roaster_pg_repository import WalterPgRepository
 from titanic.app.use_cases.passenger_cal_tester_interactor import CaledonValidation
 from titanic.app.use_cases.crew_walter_roaster_interactor import WalterQuery
@@ -16,6 +20,14 @@ rose_model_router = APIRouter(prefix="/titanic/rose", tags=["rose"])
 
 
 @rose_model_router.get("/myself")
-async def introduce_myself():
-    return {"character": "Rose DeWitt Bukater", "role": "model", "memo": "1등석 여성 생존자. ML 모델 결과 분석·조회 담당"}
+async def introduce_myself(
+    rose: RoseModelUseCase = Depends(get_rose_model_use_case)
+) -> RoseModelResponse:
+    return await rose.introduce_myself(
+        RoseModelSchema(
+            id=14,
+            name="로즈 드윗 부카터 (Rose DeWitt Bukater)"
+        )
+    )
+
 

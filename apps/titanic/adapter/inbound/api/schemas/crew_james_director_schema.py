@@ -2,8 +2,22 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-
 class JamesDirectorSchema(BaseModel):
+    id: int = Field(0, description="Musician ID")
+    name: str = Field("제임스 카메론", description="Titanic Director")
+    
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "id": 4,
+                "name": "James Carmeron",
+            }
+        }
+    }
+
+
+class FileUploadSchema(BaseModel):
+    
     passenger_id: Optional[str] = Field(None, description="승객 번호")
     survived: Optional[str] = Field(None, description="생존 여부 (0=사망, 1=생존)")
     pclass: Optional[str] = Field(None, description="티켓 등급 (1=1등석, 2=2등석, 3=3등석)")
