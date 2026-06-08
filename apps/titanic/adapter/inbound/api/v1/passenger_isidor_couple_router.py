@@ -17,6 +17,7 @@ isidor_couple_router = APIRouter(prefix="/titanic/isidor", tags=["isidor"])
 async def introduce_myself(
     isidor: IsidorCoupleUseCase = Depends(get_isidor_couple_use_case)
 ) -> IsidorCoupleResponse :
+    
     return await isidor.introduce_myself(
         IsidorCoupleSchema(
             id=12,

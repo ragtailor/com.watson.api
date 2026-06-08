@@ -15,7 +15,7 @@ class AndrewsArchitectPgRepository(AndrewsArchitectRepository):
 
     async def introduce_myself(self, query: AndrewsArchitectQuery) -> AndrewsArchitectResponse:
         
-        '''월터의 자기 소개 레포지토리 구현 메소드'''
+        '''앤드류 설계자의 자기 소개 레포지토리 구현 메소드'''
 
         logger.info(f"[AndrewsArchitectPgRepository] introduce_myself 진입 | request_data={query}")
         

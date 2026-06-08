@@ -1,5 +1,9 @@
 from dataclasses import dataclass
 
+@dataclass
+class JamesDirectorQuery:
+    id: str
+    name: str
 
 @dataclass
 class PassengerCommand:
@@ -10,7 +14,6 @@ class PassengerCommand:
     sib_sp: str
     parch: str
     survived: str
-
 
 @dataclass
 class BookingCommand:

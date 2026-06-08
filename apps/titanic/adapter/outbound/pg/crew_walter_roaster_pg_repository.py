@@ -39,20 +39,14 @@ class WalterRoasterPgRepository(WalterRoasterRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    def introduce_myself(self, query: WalterRoasterQuery)-> WalterRoasterResponse:
-        '''승객 명단을 가져오는 메소드'''
+    async def introduce_myself(self, query: WalterRoasterQuery) -> WalterRoasterResponse:
+        
+        '''앤드류 설계자의 자기 소개 레포지토리 구현 메소드'''
 
-
-        logger.info("###############################################")
-        logger.info("💊[월터 레포지토리] DB 에서 반환하는 승객 명단")
-        logger.info(f"👍🏻ID: {query.id}")
-        logger.info(f"🐥이름: {query.name}")
-        logger.info(f"🦜메모: {query.memo}")
-        logger.info("###############################################")
-
-
-        return WalterRoasterResponse(
-            id=query.id,
-            name=query.name,
-            memo=query.memo,
+        logger.info(f"[WalterRoasterPgRepository] introduce_myself 진입 | request_data={query}")
+        
+        response: WalterRoasterResponse = WalterRoasterResponse(
+            id= query.id * 10000,
+            name= query.name + "가 레포지토리에 다녀옴"
         )
+        return response

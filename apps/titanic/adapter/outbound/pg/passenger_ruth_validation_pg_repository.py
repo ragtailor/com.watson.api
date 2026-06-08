@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from fastapi import logger
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from tailor.apps.titanic.app.dtos.passenger_ruth_validation_dto import RuthValidationQuery, RuthValidationResponse
 from titanic.adapter.outbound.orm.booking_orm import BookingOrm
 from titanic.adapter.outbound.orm.passenger_orm import PersonOrm
 
@@ -30,6 +32,18 @@ def _row_to_dict(person: PersonOrm, booking: BookingOrm | None) -> dict[str, Any
 class RuthValidationPgRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
+
+    async def introduce_myself(self, query: RuthValidationQuery) -> RuthValidationResponse:
+        
+        '''앤드류 설계자의 자기 소개 레포지토리 구현 메소드'''
+
+        logger.info(f"[RuthValidationPgRepository] introduce_myself 진입 | request_data={query}")
+        
+        response: RuthValidationResponse = RuthValidationResponse(
+            id= query.id * 10000,
+            name= query.name + "가 레포지토리에 다녀옴"
+        )
+        return response
 
     async def list_by_pclass(
         self, pclass: int, page: int, page_size: int

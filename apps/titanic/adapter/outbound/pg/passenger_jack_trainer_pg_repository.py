@@ -2,16 +2,30 @@ from __future__ import annotations
 
 from typing import Any
 
+from fastapi import logger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from tailor.apps.titanic.app.dtos.passenger_jack_trainer_dto import JackTrainerQuery, JackTrainerResponse
 from titanic.adapter.outbound.orm.booking_orm import BookingOrm
 from titanic.adapter.outbound.orm.passenger_orm import PersonOrm
 
 
-class JackTrainPgRepository:
+class JackTrainerPgRepository:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
+
+    async def introduce_myself(self, query: JackTrainerQuery) -> JackTrainerResponse:
+        
+        '''잭 트레이너의 자기 소개 레포지토리 구현 메소드'''
+
+        logger.info(f"[JackTrainerPgRepository] introduce_myself 진입 | request_data={query}")
+        
+        response: JackTrainerResponse = JackTrainerResponse(
+            id= query.id * 10000,
+            name= query.name + "가 레포지토리에 다녀옴"
+        )
+        return response
 
     async def get_training_data(self) -> list[dict[str, Any]]:
         """생존 예측 모델 학습에 사용할 피처 데이터 조회"""
