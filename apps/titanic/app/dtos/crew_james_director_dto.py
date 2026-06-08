@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class PersonCommand:
+class PassengerCommand:
     passenger_id: str
     name: str
     gender: str
