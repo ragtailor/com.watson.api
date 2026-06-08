@@ -13,7 +13,7 @@ from core.config import DATABASE_URL
 from core.matrix.oracle_database import Base
 
 # autogenerate가 두 테이블을 인식하도록 ORM 모델을 반드시 임포트
-import titanic.adapter.outbound.orm.person_orm  # noqa: F401
+import titanic.adapter.outbound.orm.passenger_orm  # noqa: F401
 import titanic.adapter.outbound.orm.booking_orm  # noqa: F401
 
 config = context.config

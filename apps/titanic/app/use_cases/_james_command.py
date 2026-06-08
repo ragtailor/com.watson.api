@@ -1,13 +1,13 @@
 ﻿from typing import Dict, Any
 from pandas import DataFrame
-from titanic.app.use_cases.jack_query import JackQuery
-from titanic.app.use_cases.caledon_query import CaledonValidation
+from titanic.app.use_cases.passenger_jack_trainer_interactor import JackTrainInteractor
+from titanic.app.use_cases.passenger_cal_tester_interactor import CaledonValidation
 
 
 class JamesController:
     def __init__(self):
-        # JackQuery는 싱글톤이므로 첫 인스턴스 생성 시 모델 학습이 이루어집니다.
-        self.query = JackQuery()
+        # JackTrainInteractor는 싱글톤이므로 첫 인스턴스 생성 시 모델 학습이 이루어집니다.
+        self.query = JackTrainInteractor()
 
     def get_data(self) -> DataFrame:
         """기존 뼈대 API 지원: 첫 번째 승객 데이터 리턴"""
