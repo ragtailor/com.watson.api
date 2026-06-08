@@ -1,18 +1,13 @@
 from dataclasses import dataclass
-from typing import Any
 
+@dataclass(frozen=True) # 생성 후 수정 불가하도록 설정
+class CalTesterQuery:
+    
+    id: int   # 직관적인 타입 변경
+    name: str
 
-@dataclass
-class CalPassengerInputDTO:
-    pclass: int
-    sex: str
-    age: float
-    sibsp: int
-    parch: int
-    fare: float
-
-
-@dataclass
-class CalValidationResultDTO:
-    valid: bool
-    passenger: dict[str, Any]
+@dataclass(frozen=True) # 생성 후 수정 불가하도록 설정
+class CalPistolResponse:
+    
+    id: int   # 직관적인 타입 변경
+    name: str

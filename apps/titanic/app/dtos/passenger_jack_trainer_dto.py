@@ -1,18 +1,15 @@
 from dataclasses import dataclass
-from typing import Any, Optional
 
 
-@dataclass
-class JackModelInfoDTO:
-    model_name: str
-    train_accuracy: str
+@dataclass(frozen=True) # 생성 후 수정 불가하도록 설정
+class JackTrainerQuery:
+    
+    id: int   # 직관적인 타입 변경
+    name: str
 
+@dataclass(frozen=True) # 생성 후 수정 불가하도록 설정
+class JackTrainerResponse:
+    
+    id: int   # 직관적인 타입 변경
+    name: str
 
-@dataclass
-class JackPredictionDTO:
-    survived: int
-    survival_probability: str
-    death_probability: str
-    passenger_info: dict[str, Any]
-    message: Optional[str] = None
-    analysis: Optional[str] = None

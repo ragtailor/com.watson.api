@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 
-
-@dataclass
+@dataclass(frozen=True) # 생성 후 수정 불가하도록 설정
 class WalterRoasterQuery:
-    id: int
+    
+    id: int   # 직관적인 타입 변경
     name: str
-    memo: str
 
 
-@dataclass
+@dataclass(frozen=True) # 생성 후 수정 불가하도록 설정
 class WalterRoasterResponse:
-    id: int
+    
+    id: int   # 직관적인 타입 변경
     name: str
-    memo: str
+ 
