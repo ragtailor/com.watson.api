@@ -3,9 +3,12 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
 
+from tailor.apps.titanic.app.dtos.crew_hartley_violin_dto import HartleyViolinResponse
+
 
 class HartleyViolinUseCase(ABC):
 
     @abstractmethod
-    async def play_violin(self) -> dict[str, Any]:
-        ...
+    async def introduce_myself(self) -> HartleyViolinResponse:
+        '''하틀리 바이올린의 자기소개 메소드'''
+        pass

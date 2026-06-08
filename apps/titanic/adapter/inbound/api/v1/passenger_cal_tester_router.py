@@ -1,5 +1,8 @@
-from fastapi import APIRouter
-from titanic.app.use_cases.passenger_cal_tester_interactor import CaledonValidation
+from fastapi import APIRouter, Depends
+from tailor.apps.titanic.adapter.inbound.api.schemas.passenger_cal_tester_schema import CalTesterSchema
+from tailor.apps.titanic.app.dtos.passenger_cal_tester_dto import CalTesterResponse
+from tailor.apps.titanic.app.ports.input.passenger_cal_tester_use_case import CalTesterUseCase
+from tailor.apps.titanic.dependencies.passenger_cal_tester_provider import get_cal_test_use_case
 
 '''
 칼 캘던 하클리 (Caledon Hockley)
@@ -8,11 +11,18 @@ from titanic.app.use_cases.passenger_cal_tester_interactor import CaledonValidat
 승객 입력값 유효성 검사를 담당합니다.
 '''
 
-cal_test_router = APIRouter(prefix="/titanic/cal", tags=["cal"])
+cal_tester_router = APIRouter(prefix="/titanic/cal", tags=["cal"])
 
 
-@cal_test_router.get("/myself")
-async def introduce_myself():
-    return {"character": "Caledon Hockley", "role": "validation", "memo": "오만한 자산가. 승객 입력값 유효성 검사 담당"}
+@cal_tester_router.get("/myself")
+async def introduce_myself(
+    cal: CalTesterUseCase = Depends(get_cal_test_use_case)
+) -> CalTesterResponse:
+    return await cal.introduce_myself(
+        CalTesterSchema(
+            id=2,
+            name="칼 캘던 하클리 (Caledon Hockley)"
+        )
+    )
 
 

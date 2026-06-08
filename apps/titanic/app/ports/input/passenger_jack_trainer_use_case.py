@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 
-class JackTrainUseCase(ABC):
+class JackTrainerUseCase(ABC):
 
     @abstractmethod
     async def get_model_info(self) -> dict[str, Any]:

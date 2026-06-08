@@ -3,7 +3,7 @@ import csv
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
-from tailor.apps.titanic.adapter.inbound.api.schemas.crew_james_director_schema import TitanicRecordSchema
+from tailor.apps.titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorSchema, TitanicRecordSchema
 from titanic.app.dtos.crew_james_director_dto import JamesDirectorResponse
 from titanic.app.ports.input.crew_james_director_use_case import JamesDirectorUseCase
 from titanic.dependencies.crew_james_director_provider import get_james_director_use_case
@@ -15,13 +15,18 @@ from titanic.dependencies.crew_james_director_provider import get_james_director
  완벽주의 성향으로 타이타닉의 모든 세트와 디테일을
  고증한 아키텍처의 총괄 디렉터 역할 수행
 '''
-
 james_director_router = APIRouter(prefix="/james", tags=["james"])
 
-
 @james_director_router.get("/myself")
-async def introduce_myself():
-    return {"character": "James Cameron", "role": "director", "memo": "타이타닉 감독. CSV 업로드·승객 명단 총괄 담당"}
+async def introduce_myself(
+    james: JamesDirectorUseCase = Depends(get_james_director_use_case)
+):
+    return await james.introduce_myself(
+        JamesDirectorSchema(
+            id=6,
+            name="제임스 카메론 (James Carmeron)"
+        )
+    )
 
 
 @james_director_router.post("/upload", response_model=JamesDirectorResponse, summary="타이타닉 승객 명단 CSV 파일 업로드")

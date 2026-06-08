@@ -7,5 +7,6 @@ from typing import Any
 class IsidorCoupleUseCase(ABC):
 
     @abstractmethod
-    async def get_couple_survival(self) -> dict[str, Any]:
-        ...
+    def introduce_myself(self, schema: IsidorCoupleSchema) -> IsidorCoupleResponse:
+        '''이시도어 커플의 자기소개 메소드'''
+        pass

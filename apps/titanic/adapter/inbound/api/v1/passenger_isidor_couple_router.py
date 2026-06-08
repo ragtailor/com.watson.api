@@ -1,4 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+
+from tailor.apps.titanic.adapter.inbound.api.schemas.passenger_isidor_couple_schema import IsidorCoupleSchema
+from tailor.apps.titanic.app.dtos.passenger_isidor_couple_dto import IsidorCoupleResponse
+from tailor.apps.titanic.app.ports.input.passenger_isidor_couple_use_case import IsidorCoupleUseCase
+from tailor.apps.titanic.dependencies.passenger_isidor_couple_provider import get_isidor_couple_use_case
 
 '''
 이시도르 & 이다 스트라우스 부부 (Isidor & Ida Straus)
@@ -9,6 +14,13 @@ from fastapi import APIRouter
 isidor_couple_router = APIRouter(prefix="/titanic/isidor", tags=["isidor"])
 
 @isidor_couple_router.get("/myself")
-async def introduce_myself():
-    return {"character": "Isidor & Ida Straus", "role": "couple", "memo": "함께 운명을 맞이한 노부부. 커플 생존 데이터 담당"}
+async def introduce_myself(
+    isidor: IsidorCoupleUseCase = Depends(get_isidor_couple_use_case)
+) -> IsidorCoupleResponse :
+    return await isidor.introduce_myself(
+        IsidorCoupleSchema(
+            id=12,
+            name="이시도르 & 이다 스트라우스 부부 (Isidor & Ida Straus)"
+        )
+    )
 
