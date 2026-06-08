@@ -13,8 +13,8 @@ class AndrewsArchitectInteractor(AndrewsArchitectUseCase):
 
     async def introduce_myself(self, schema: AndrewsArchitectSchema) -> AndrewsArchitectResponse:
         '''앤드류 설계자의 자기소개 인터렉트'''
-        
-        return self.repository.introduce_myself(AndrewsArchitectQuery(
+
+        return await self.repository.introduce_myself(AndrewsArchitectQuery(
             id = schema.id,
             name = schema.name
         ))

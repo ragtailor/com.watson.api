@@ -12,8 +12,8 @@ class HartleyViolinInteractor(HartleyViolinUseCase):
 
     async def introduce_myself(self, schema: HartleyViolinSchema) -> HartleyViolinResponse:
         '''하틀리 바이올린의 자기소개 인터렉트'''
-        
-        return self.repository.introduce_myself(HartleyViolinQuery(
+
+        return await self.repository.introduce_myself(HartleyViolinQuery(
             id = schema.id,
             name = schema.name
         ))
