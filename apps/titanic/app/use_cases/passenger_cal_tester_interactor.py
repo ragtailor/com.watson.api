@@ -1,23 +1,20 @@
-from pydantic import BaseModel, Field
-from typing import Literal
+from __future__ import annotations
+
+from tailor.apps.titanic.adapter.inbound.api.schemas.crew_andrews_architect_schema import CalTesterSchema
+from tailor.apps.titanic.app.dtos.crew_andrews_architect_dto import CalTesterQuery, CalTesterResponse
+from tailor.apps.titanic.app.ports.input.crew_andrews_architect_use_case import CalTesterUseCase
+from tailor.apps.titanic.app.ports.output.crew_andrews_architect_repository import CalTesterRepository
 
 
-class CaledonValidation(BaseModel):
-    Pclass: int = Field(..., ge=1, le=3, description="티켓 클래스 (1 = 1등석, 2 = 2등석, 3 = 3등석)")
-    Sex: Literal["male", "female"] = Field(..., description="성별 (male 또는 female)")
-    Age: float = Field(..., ge=0.0, description="나이")
-    SibSp: int = Field(..., ge=0, description="함께 탑승한 형제자매 / 배우자의 수")
-    Parch: int = Field(..., ge=0, description="함께 탑승한 부모님 / 아이들의 수")
-    Fare: float = Field(..., ge=0.0, description="탑승 요금")
+class CalTesterInteractor(CalTesterUseCase):
+    
+    def __init__(self, repository: CalTesterRepository):
+        self.repository = repository
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "Pclass": 3,
-                "Sex": "male",
-                "Age": 22.0,
-                "SibSp": 1,
-                "Parch": 0,
-                "Fare": 7.25
-            }
-        }
+    async def introduce_myself(self, schema: CalTesterSchema) -> CalTesterResponse:
+        '''칼 테스터의 자기소개 인터렉트'''
+
+        return await self.repository.introduce_myself(CalTesterQuery(
+            id = schema.id,
+            name = schema.name
+        ))

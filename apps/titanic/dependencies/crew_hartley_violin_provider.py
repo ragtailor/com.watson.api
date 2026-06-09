@@ -7,7 +7,7 @@ from titanic.app.ports.input.crew_hartley_violin_use_case import HartleyViolinUs
 from titanic.app.use_cases.crew_hartley_violin_interactor import HartleyViolinInteractor
 
 def get_hartley_violin_use_case(
-                db : AsyncSession = Depends(get_db)
+        db : AsyncSession = Depends(get_db)
 ) -> HartleyViolinUseCase:
         repository : HartleyViolinRepository = HartleyViolinPgRepository(session=db)
         return HartleyViolinInteractor(repository=repository)
