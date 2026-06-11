@@ -8,15 +8,9 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
-# [변경 1] 함수형 declarative_base 대신 클래스형 DeclarativeBase 임포트
-from sqlalchemy.orm import DeclarativeBase
 
 from core.config import DATABASE_URL
-
-
-# [변경 1] 2.0 표준: 클래스 상속 방식으로 Base 선언 (타입 힌트 및 IDE 자동완성 완벽 지원)
-class Base(DeclarativeBase):
-    pass
+from tailor.core.matrix.grid_neo_theone_base import Base
 
 
 engine: AsyncEngine | None = None

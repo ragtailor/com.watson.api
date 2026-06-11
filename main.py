@@ -4,13 +4,15 @@ import sys
 import os
 from contextlib import asynccontextmanager
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "apps"))
+_tailor_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(_tailor_root))        # com.ragtaylor/ → tailor 패키지
+sys.path.insert(0, os.path.join(_tailor_root, "apps"))   # tailor/apps/  → titanic 등 앱
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.matrix.oracle_database import dispose_engine, get_db, init_engine, create_all_tables
-from titanic.adapter.inbound.api import titanic_router
+from tailor.core.matrix.grid_oracle_database_manager import dispose_engine, get_db, init_engine, create_all_tables
+from tailor.apps.titanic.adapter.inbound.api import titanic_router
 
 
 def _configure_logging() -> None:
@@ -50,11 +52,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(titanic_router)
-
-
-
-
+app.include_router(titanic_router, prefix="/api")
 
 @app.get("/")
 def read_root():

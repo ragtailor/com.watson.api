@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import logger
+import logging
+
+logger = logging.getLogger(__name__)
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from tailor.apps.titanic.app.dtos.passenger_jack_trainer_dto import JackTrainerQuery, JackTrainerResponse
-from titanic.adapter.outbound.orm.booking_orm import BookingOrm
-from titanic.adapter.outbound.orm.passenger_orm import PersonOrm
+from titanic.adapter.outbound.orm.passenger_rose_model_orm import RoseModelOrm as BookingOrm
+from titanic.adapter.outbound.orm.passenger_jack_trainer_orm import JackTrainerOrm as PersonOrm
 
 
 class JackTrainerPgRepository:

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from tailor.apps.titanic.adapter.inbound.api.schemas.crew_andrews_architect_schema import HartleyViolinSchema
-from tailor.apps.titanic.app.dtos.crew_andrews_architect_dto import HartleyViolinQuery, HartleyViolinResponse
-from tailor.apps.titanic.app.ports.input.crew_andrews_architect_use_case import HartleyViolinUseCase
-from tailor.apps.titanic.app.ports.output.crew_andrews_architect_repository import HartleyViolinRepository
+from tailor.apps.titanic.adapter.inbound.api.schemas.crew_hartley_violin_schema import HartleyViolinSchema
+from tailor.apps.titanic.app.dtos.crew_hartley_violin_dto import HartleyViolinQuery, HartleyViolinResponse
+from tailor.apps.titanic.app.ports.input.crew_hartley_violin_use_case import HartleyViolinUseCase
+from tailor.apps.titanic.app.ports.output.crew_hartley_violin_repository import HartleyViolinRepository
 
 class HartleyViolinInteractor(HartleyViolinUseCase):
     

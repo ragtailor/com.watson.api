@@ -8,7 +8,7 @@ class RoseModelOrm(Base):
     __tablename__ = "bookings"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    person_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("persons.id"), nullable=True)
+    passenger_id: Mapped[str | None] = mapped_column(String, ForeignKey("passengers.passenger_id"), nullable=True)
     pclass: Mapped[str | None] = mapped_column(String, nullable=True)
     ticket: Mapped[str | None] = mapped_column(String, nullable=True)
     fare: Mapped[str | None] = mapped_column(String, nullable=True)

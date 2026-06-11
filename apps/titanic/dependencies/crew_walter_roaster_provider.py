@@ -9,7 +9,7 @@ from titanic.app.use_cases.crew_walter_roaster_interactor import WalterRoasterIn
 
 
 def get_walter_roaster_use_case(
-                db : AsyncSession = Depends(get_db)
+        db : AsyncSession = Depends(get_db)
 ) -> WalterRoasterUseCase:
         repository : WalterRoasterRepository = WalterRoasterPgRepository(session=db)
         return WalterRoasterInteractor(repository=repository)

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from fastapi import logger
+import logging
+
+logger = logging.getLogger(__name__)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from tailor.apps.titanic.app.dtos.crew_lowe_boat_dto import LoweBoatQuery, LoweBoatResponse

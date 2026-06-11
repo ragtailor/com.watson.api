@@ -1,13 +1,9 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy import func, select
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from core.matrix.oracle_database import get_db
-from tailor.apps.titanic.adapter.inbound.api.schemas.crew_smith_captain_schema import SmithCaptainSchema
-from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainResponse
-from tailor.apps.titanic.app.ports.input.crew_smith_captain_use_case import SmithCaptainUseCase
-from tailor.apps.titanic.dependencies.crew_smith_captain_provider import get_smith_captain_use_case
-from titanic.adapter.outbound.orm.passenger_orm import TitanicRecord
+from typing import Annotated
+from fastapi import APIRouter, Body, Depends
+from titanic.adapter.inbound.api.schemas.crew_smith_captain_schema import ChatSchema, SmithCaptainSchema, SmithCaptainChatSchema
+from titanic.app.dtos.crew_smith_captain_dto import SmithCaptainResponse
+from titanic.app.ports.input.crew_smith_captain_use_case import SmithCaptainUseCase
+from titanic.dependencies.crew_smith_captain_provider import get_smith_captain_use_case
 
 '''
 스미스 선장 (Captain Edward John Smith)
@@ -17,17 +13,27 @@ from titanic.adapter.outbound.orm.passenger_orm import TitanicRecord
 추천 파일명: smith_captain_router.py (또는 smith_wheel_router.py)
 '''
 
-smith_captain_router = APIRouter(prefix="/titanic/smith", tags=["smith"])
+smith_captain_router = APIRouter(prefix="/smith", tags=["smith"])
 
+
+@smith_captain_router.post("/chat")
+async def chat(
+    schema: Annotated[ChatSchema, Body()],
+    smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case),
+) -> SmithCaptainResponse:
+    return await smith.chat(schema)
 
 @smith_captain_router.get("/myself")
 async def introduce_myself(
-    james: SmithCaptainUseCase = Depends(get_smith_captain_use_case)
+    smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case)
 ) -> SmithCaptainResponse :
-    return await james.introduce_myself(
+    return await smith.introduce_myself(
         SmithCaptainSchema(
             id=7,
             name="스미스 선장 (Captain Edward John Smith)"
         )
     )
+
+
+
 

@@ -10,7 +10,7 @@ from alembic import context
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "apps"))
 
 from core.config import DATABASE_URL
-from core.matrix.oracle_database import Base
+from tailor.core.matrix.grid_oracle_database_manager import Base
 
 # autogenerate가 두 테이블을 인식하도록 ORM 모델을 반드시 임포트
 import titanic.adapter.outbound.orm.passenger_orm  # noqa: F401

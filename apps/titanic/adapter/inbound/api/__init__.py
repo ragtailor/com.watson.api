@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
 from titanic.adapter.inbound.api.v1.crew_andrews_architect_router import andrews_architect_router
-from titanic.adapter.inbound.api.v1.passenger_cal_tester_router import cal_test_router
+from titanic.adapter.inbound.api.v1.passenger_cal_tester_router import cal_tester_router
 from titanic.adapter.inbound.api.v1.crew_hartley_violin_router import hartley_violin_router
 from titanic.adapter.inbound.api.v1.passenger_isidor_couple_router import isidor_couple_router
-from titanic.adapter.inbound.api.v1.passenger_jack_trainer_router import jack_train_router
+from titanic.adapter.inbound.api.v1.passenger_jack_trainer_router import jack_trainer_router
 from titanic.adapter.inbound.api.v1.crew_james_director_router import james_director_router
 from titanic.adapter.inbound.api.v1.passenger_rose_model_router import rose_model_router
 from tailor.apps.titanic.adapter.inbound.api.v1.passenger_ruth_validation_router import ruth_validation_router
@@ -17,8 +17,8 @@ titanic_router.include_router(walter_roaster_router)
 titanic_router.include_router(rose_model_router)
 titanic_router.include_router(ruth_validation_router)
 titanic_router.include_router(smith_captain_router)
-titanic_router.include_router(jack_train_router)
-titanic_router.include_router(cal_test_router)
+titanic_router.include_router(jack_trainer_router)
+titanic_router.include_router(cal_tester_router)
 titanic_router.include_router(andrews_architect_router)
 titanic_router.include_router(hartley_violin_router)
 titanic_router.include_router(isidor_couple_router)

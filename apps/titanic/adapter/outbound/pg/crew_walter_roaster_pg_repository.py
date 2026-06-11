@@ -5,8 +5,8 @@ from typing import Any
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from titanic.adapter.outbound.orm.booking_orm import BookingOrm
-from titanic.adapter.outbound.orm.passenger_orm import PersonOrm
+from titanic.adapter.outbound.orm.passenger_rose_model_orm import RoseModelOrm as BookingOrm
+from titanic.adapter.outbound.orm.passenger_jack_trainer_orm import JackTrainerOrm as PersonOrm
 from titanic.app.dtos.crew_walter_roaster_dto import WalterRoasterQuery, WalterRoasterResponse
 from titanic.app.ports.output.crew_walter_roaster_repository import WalterRoasterRepository
 import logging

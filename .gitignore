@@ -106,3 +106,14 @@ Desktop.ini
 # 기타 로컬/CI 캐시
 # =============================================================================
 .cache/
+
+# 루트 .gitignore
+
+# 옵시디언 내부 작업 영역 및 로컬 환경설정 캐시 무시
+.obsidian/workspace.json
+.obsidian/graph.json
+.obsidian/plugins/
+
+# 운영체제 및 IDE 환경 파일 무시
+.DS_Store
+.vscode/

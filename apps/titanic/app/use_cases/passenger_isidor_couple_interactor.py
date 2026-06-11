@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from tailor.apps.titanic.adapter.inbound.api.schemas.crew_andrews_architect_schema import IsidorCoupleSchema
-from tailor.apps.titanic.app.dtos.crew_andrews_architect_dto import IsidorCoupleQuery, IsidorCoupleResponse
-from tailor.apps.titanic.app.ports.input.crew_andrews_architect_use_case import IsidorCoupleUseCase
-from tailor.apps.titanic.app.ports.output.crew_andrews_architect_repository import IsidorCoupleRepository
+from tailor.apps.titanic.adapter.inbound.api.schemas.passenger_isidor_couple_schema import IsidorCoupleSchema
+from tailor.apps.titanic.app.dtos.passenger_isidor_couple_dto import IsidorCoupleQuery, IsidorCoupleResponse
+from tailor.apps.titanic.app.ports.input.passenger_isidor_couple_use_case import IsidorCoupleUseCase
+from tailor.apps.titanic.app.ports.output.passenger_isidor_couple_repository import IsidorCoupleRepository
 
 
 class IsidorCoupleInteractor(IsidorCoupleUseCase):

@@ -7,7 +7,7 @@ from titanic.app.ports.input.crew_andrews_architect_use_case import AndrewsArchi
 from titanic.app.use_cases.crew_andrews_architect_interactor import AndrewsArchitectInteractor
 
 def get_andrews_architect_use_case(
-                db : AsyncSession = Depends(get_db)
+        db : AsyncSession = Depends(get_db)
 ) -> AndrewsArchitectUseCase:
         repository : AndrewsArchitectRepository = AndrewsArchitectPgRepository(session=db)
         return AndrewsArchitectInteractor(repository=repository)

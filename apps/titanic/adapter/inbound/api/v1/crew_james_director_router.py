@@ -3,7 +3,7 @@ import csv
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
-from tailor.apps.titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorSchema, TitanicRecordSchema
+from tailor.apps.titanic.adapter.inbound.api.schemas.crew_james_director_schema import JamesDirectorSchema, FileUploadSchema, UploadResultSchema
 from titanic.app.dtos.crew_james_director_dto import JamesDirectorResponse
 from titanic.app.ports.input.crew_james_director_use_case import JamesDirectorUseCase
 from titanic.dependencies.crew_james_director_provider import get_james_director_use_case
@@ -29,7 +29,7 @@ async def introduce_myself(
     )
 
 
-@james_director_router.post("/upload", response_model=JamesDirectorResponse, summary="타이타닉 승객 명단 CSV 파일 업로드")
+@james_director_router.post("/upload", response_model=UploadResultSchema, summary="타이타닉 승객 명단 CSV 파일 업로드")
 async def upload_titanic_file(
     file: UploadFile = File(...),
     james: JamesDirectorUseCase = Depends(get_james_director_use_case),
@@ -39,13 +39,13 @@ async def upload_titanic_file(
     )
 
 
-def _parse_csv(text: str) -> list[TitanicRecordSchema]:
+def _parse_csv(text: str) -> list[FileUploadSchema]:
     if not text.strip():
         raise HTTPException(status_code=400, detail="빈 CSV 파일입니다.")
     reader = csv.DictReader(StringIO(text))
     if reader.fieldnames is None:
         raise HTTPException(status_code=400, detail="CSV 헤더를 읽을 수 없습니다.")
-    return [TitanicRecordSchema(**_normalize_titanic_row(row)) for row in reader]
+    return [FileUploadSchema(**_normalize_titanic_row(row)) for row in reader]
 
 
 def _normalize_titanic_row(row: dict) -> dict:

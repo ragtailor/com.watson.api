@@ -3,7 +3,6 @@ from tailor.apps.titanic.adapter.inbound.api.schemas.passenger_jack_trainer_sche
 from tailor.apps.titanic.app.dtos.passenger_jack_trainer_dto import JackTrainerResponse
 from tailor.apps.titanic.app.ports.input.passenger_jack_trainer_use_case import JackTrainerUseCase
 from tailor.apps.titanic.dependencies.passenger_jack_trainer_provider import get_jack_train_use_case
-from titanic.app.use_cases.passenger_cal_tester_interactor import CaledonValidation
 
 '''
 잭 도슨 (Jack Dawson)
@@ -12,7 +11,7 @@ from titanic.app.use_cases.passenger_cal_tester_interactor import CaledonValidat
 생존 예측 모델의 핵심 인터페이스를 담당합니다.
 '''
 
-jack_trainer_router = APIRouter(prefix="/titanic/jack", tags=["jack"])
+jack_trainer_router = APIRouter(prefix="/jack", tags=["jack"])
 
 
 @jack_trainer_router.get("/myself")
