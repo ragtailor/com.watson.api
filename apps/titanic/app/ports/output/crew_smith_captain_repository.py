@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainQuery, SmithCaptainResponse
+from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainQuery, SmithCaptainResponse, ChatResponse
 
 class SmithCaptainRepository(ABC):
 
@@ -11,7 +11,7 @@ class SmithCaptainRepository(ABC):
         pass
 
     @abstractmethod
-    async def chat(self, message: str) -> SmithCaptainResponse:
+    async def chat(self, message: str) -> ChatResponse:
         '''사용자 자연어 메시지를 받아 응답을 반환'''
         pass
 

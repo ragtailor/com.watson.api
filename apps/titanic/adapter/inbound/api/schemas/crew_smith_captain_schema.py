@@ -1,16 +1,28 @@
 from pydantic import BaseModel, Field
+from typing import Literal
+
+
+class MessageItem(BaseModel):
+    role: Literal["user", "assistant"]
+    text: str
+
 
 class ChatSchema(BaseModel):
-
-    message: str = Field(..., description="사용자가 채팅창에 입력한 자연어")
+    messages: list[MessageItem] = Field(..., description="채팅 메시지 히스토리")
+    systemInstruction: str | None = Field(None, description="시스템 프롬프트")
 
     model_config = {
         "json_schema_extra": {
             "example": {
-                "message": "타이타닉 생존율을 분석해줘",
+                "messages": [{"role": "user", "text": "타이타닉 생존율을 분석해줘"}],
             }
         }
     }
+
+
+class SmithCaptainChatSchema(BaseModel):
+    messages: list[MessageItem] = Field(..., description="채팅 메시지 히스토리")
+
 
 class SmithCaptainSchema(BaseModel):
 

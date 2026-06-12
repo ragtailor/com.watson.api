@@ -11,3 +11,5 @@ def get_rose_model(
 ) -> RoseModelUseCase:
     repository: RoseModelRepository = RoseModelPgRepository(session=db)
     return RoseModelInteractor(repository=repository)
+
+get_rose_model_use_case = get_rose_model

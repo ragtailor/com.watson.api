@@ -1,9 +1,12 @@
+import logging
 from typing import Annotated
 from fastapi import APIRouter, Body, Depends
 from titanic.adapter.inbound.api.schemas.crew_smith_captain_schema import ChatSchema, SmithCaptainSchema, SmithCaptainChatSchema
-from titanic.app.dtos.crew_smith_captain_dto import SmithCaptainResponse
+from titanic.app.dtos.crew_smith_captain_dto import SmithCaptainResponse, ChatResponse
 from titanic.app.ports.input.crew_smith_captain_use_case import SmithCaptainUseCase
 from titanic.dependencies.crew_smith_captain_provider import get_smith_captain_use_case
+
+logger = logging.getLogger(__name__)
 
 '''
 스미스 선장 (Captain Edward John Smith)
@@ -20,7 +23,9 @@ smith_captain_router = APIRouter(prefix="/smith", tags=["smith"])
 async def chat(
     schema: Annotated[ChatSchema, Body()],
     smith: SmithCaptainUseCase = Depends(get_smith_captain_use_case),
-) -> SmithCaptainResponse:
+) -> ChatResponse:
+    for msg in schema.messages:
+        logger.info("[smith/chat] messages | role=%s | text=%s", msg.role, msg.text)
     return await smith.chat(schema)
 
 @smith_captain_router.get("/myself")

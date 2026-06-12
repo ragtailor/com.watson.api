@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainQuery, SmithCaptainResponse
+from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainQuery, SmithCaptainResponse, ChatResponse
 from titanic.adapter.outbound.orm.passenger_jack_trainer_orm import JackTrainerOrm as PersonOrm
 
 
@@ -28,9 +28,9 @@ class SmithCaptainPgRepository:
         )
         return response
 
-    async def chat(self, message: str) -> SmithCaptainResponse:
+    async def chat(self, message: str) -> ChatResponse:
         logger.info(f"[SmithCaptainPgRepository] chat 진입 | message={message}")
-        return SmithCaptainResponse(id=0, name=message)
+        return ChatResponse(text=message)
 
     async def get_stats(self) -> dict[str, Any]:
         """전체 승객 생존/사망 통계 조회"""

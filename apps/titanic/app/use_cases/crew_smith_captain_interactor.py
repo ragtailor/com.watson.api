@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import Depends
 
 from tailor.apps.titanic.adapter.inbound.api.schemas.crew_smith_captain_schema import ChatSchema, SmithCaptainSchema, SmithCaptainChatSchema
-from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainQuery, SmithCaptainResponse
+from tailor.apps.titanic.app.dtos.crew_smith_captain_dto import SmithCaptainQuery, SmithCaptainResponse, ChatResponse
 from tailor.apps.titanic.app.ports.input.crew_smith_captain_use_case import SmithCaptainUseCase
 from tailor.apps.titanic.app.ports.input.passenger_jack_trainer_use_case import JackTrainerUseCase
 from tailor.apps.titanic.app.ports.input.passenger_rose_model_use_case import RoseModelUseCase
@@ -22,10 +22,13 @@ class SmithCaptainInteractor(SmithCaptainUseCase):
     async def chat(self, schema: ChatSchema,
                    jack: JackTrainerUseCase = Depends(get_jack_trainer),
                    rose: RoseModelUseCase = Depends(get_rose_model)
-                   ) -> SmithCaptainResponse:
+                   ) -> ChatResponse:
         
         
-        return await self.repository.chat(schema.message)
+        last_user_text = next(
+            (m.text for m in reversed(schema.messages) if m.role == "user"), ""
+        )
+        return await self.repository.chat(last_user_text)
 
 
     async def introduce_myself(self, schema: SmithCaptainSchema) -> SmithCaptainResponse:
