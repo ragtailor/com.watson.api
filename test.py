@@ -8,12 +8,12 @@ def run_korean_ai(user_text):
     print("\n--- [1단계] 입력 문장 전처리 중... ---")
     
     # kiwipiepy를 활용한 가벼운 전처리 예시 (띄어쓰기 오차 보정)
-    cleaned_text = kiwi.space_tolerate(user_text)
+    # space_tolerance는 tokenize() 옵션으로 적용
+    tokens = kiwi.tokenize(user_text)
+    cleaned_text = user_text
     print(f"원본 문장: {user_text}")
-    print(f"정제된 문장: {cleaned_text}")
-    
+
     # 형태소 분석 결과 예시 출력 (명사만 추출해보기)
-    tokens = kiwi.tokenize(cleaned_text)
     nouns = [t.form for t in tokens if t.tag.startswith('NN')]
     print(f"추출된 핵심 명사: {nouns}")
     
@@ -21,13 +21,18 @@ def run_korean_ai(user_text):
     
     # 2. Ollama에 설치된 야놀자 EEVE 모델에 질문 던지기
     response = ollama.chat(
-        model='heun/eeve-korean-10.8b-instruct:gguf',
+        model='qwen2.5:3b',
         messages=[
             {
-                'role': 'user', 
+                'role': 'user',
+                'content': cleaned_text
+            },
+            {
+                'role': 'user',
                 'content': cleaned_text
             }
-        ]
+        ],
+        options={'num_gpu': 0}
     )
     
     # 3. 결과 반환
